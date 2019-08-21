@@ -62,8 +62,6 @@ public class CutViewCircle extends View {
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
-//        //計算比例
-//        var imageWidth=this.getDrawingCache()
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -84,9 +82,7 @@ public class CutViewCircle extends View {
             rectLeft = 0;
             rectTop = 0;
             rectBottom = measuredHeight ;
-//            radius=(measuredWidth-0F)/2;
-//            circleX = (measuredWidth-0F)/2;
-//            circleY = (measuredHeight-0F)/2;
+
             radius=(rectRight-rectLeft)/2;
             circleX = (rectRight+rectLeft)/2;
             circleY = (rectBottom+rectTop)/2;
@@ -103,9 +99,6 @@ public class CutViewCircle extends View {
                 rectRight = measuredWidth;
                 rectTop = (measuredHeight - h)/2;
                 rectBottom = rectTop + h;
-//                circleX = (measuredWidth-0F)/2;
-//                circleY = ((( (measuredHeight - h)/2) + h)-( (measuredHeight - h)/2))/2;
-//                radius=circleY;
                 radius=(rectBottom-rectTop)/2;
                 circleX = (rectRight+rectLeft)/2;
                 circleY = (rectBottom+rectTop)/2;
@@ -115,9 +108,7 @@ public class CutViewCircle extends View {
                 rectBottom = measuredHeight;
                 rectLeft = (measuredWidth - w)/2;
                 rectRight = rectLeft + w;
-//                circleX = ((((measuredWidth - w)/2) + w)-((measuredWidth - w)/2))/2;
-//                circleY = measuredHeight-0F;
-//                radius=circleX;
+
                 radius=(rectRight-rectLeft)/2;
                 circleX = (rectRight+rectLeft)/2;
                 circleY = (rectBottom+rectTop)/2;
@@ -128,16 +119,13 @@ public class CutViewCircle extends View {
     protected void onDraw(Canvas canvas) {
 
         paint.setStrokeWidth(dp1);
-        //绘制裁剪区域的矩形, 传入margin值来确定大小
-        //canvas.drawRect(rectLeft, rectTop, rectRight, rectBottom, paint);
+        //繪製圓形
         canvas.drawCircle(circleX,circleY,radius,paint);
-        //绘制四条分割线和四个角
+        //繪製外框
         drawLine(canvas, rectLeft, rectTop, rectRight, rectBottom);
 
     }
-    /**
-     * 绘制四条分割线和四个角
-     */
+    //繪製外框
     private void drawLine(Canvas canvas, float left, float top, float right, float bottom) {
 
         paint.setStrokeWidth(1);
@@ -222,21 +210,21 @@ public class CutViewCircle extends View {
                 downY = event.getY();
 
                 if(downX >= rectLeft && downX <= rectRight && downY >= rectTop && downY <= rectBottom){
-                    //判断手指的范围在左面还是右面
+                    //判斷左右
                     int w = (int) ((rectRight - rectLeft)/3);
                     if (downX >= rectLeft && downX <= rectLeft+w) {
                         isLeft = true;
                     } else if (downX <= rectRight && downX >= rectRight - w) {
                         isRight = true;
                     }
-                    //判断手指的范围在上面还是下面
+                    //判斷上下
                     int h = (int) ((rectBottom - rectTop)/3);
                     if (downY >= rectTop && downY <= rectTop+h) {
                         isTop = true;
                     } else if (downY <= rectBottom && downY >= rectBottom - h) {
                         isBottom = true;
                     }
-                    //如果手指范围没有在任何边界位置, 那么我们就认为用户是想拖拽框体
+                    //判斷拖曳
                     if (!isLeft && !isTop && !isRight && !isBottom) {
                         isMove = true;
                     }
@@ -245,33 +233,31 @@ public class CutViewCircle extends View {
             case MotionEvent.ACTION_MOVE:
                 float moveX = event.getX();
                 float moveY = event.getY();
-                //得到手指移动距离
+                //位移
                 float slideX = moveX - downX ;
                 float slideY = moveY - downY;
-
-                if (isMove) {//判断是否是拖拽模式
+                //拖曳模式
+                if (isMove) {
                     rectLeft += slideX;
                     rectRight += slideX;
                     rectTop += slideY;
                     rectBottom += slideY;
-                    //同时改变left和right值, 达到左右移动的效果
-                    if (rectLeft < 0 || rectRight > measuredWidth) {//判断x轴的移动边界
+                    //左右邊同步位移
+                    if (rectLeft < 0 || rectRight > measuredWidth) {//判斷X邊界
                         rectLeft -= slideX;
                         rectRight -= slideX;
-//                        circleX= (rectRight-rectLeft)/2;
                     }
-                    //同时改变top和bottom值, 达到上下移动的效果
-                    if (rectTop < 0 || rectBottom > measuredHeight ) {//判断y轴的移动边界
+                    //上下邊同步位移
+                    if (rectTop < 0 || rectBottom > measuredHeight ) {//判斷Y邊界
                         rectTop -= slideY;
                         rectBottom -= slideY;
-//                        circleY = (rectBottom+rectTop)/2;
                     }
-                    //实时触发onDraw()方法
+                    //重繪畫面
                     radius=(rectRight-rectLeft)/2;
                     circleX = (rectRight+rectLeft)/2;
                     circleY = (rectBottom+rectTop)/2;
-                    Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                    Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                    Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                    Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                     invalidate();
                     downX = moveX;
                     downY = moveY;
@@ -358,8 +344,8 @@ public class CutViewCircle extends View {
                             radius=(rectRight-rectLeft)/2;
                             circleX = (rectRight+rectLeft)/2;
                             circleY = (rectBottom+rectTop)/2;
-                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                             invalidate();
                             downX = moveX;
                             downY = moveY;
@@ -409,8 +395,8 @@ public class CutViewCircle extends View {
                             radius=(rectRight-rectLeft)/2;
                             circleX = (rectRight+rectLeft)/2;
                             circleY = (rectBottom+rectTop)/2;
-                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                             invalidate();
                             downX = moveX;
                             downY = moveY;
@@ -460,8 +446,8 @@ public class CutViewCircle extends View {
                             radius=(rectRight-rectLeft)/2;
                             circleX = (rectRight+rectLeft)/2;
                             circleY = (rectBottom+rectTop)/2;
-                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                             invalidate();
                             downX = moveX;
                             downY = moveY;
@@ -512,8 +498,8 @@ public class CutViewCircle extends View {
                             radius=(rectRight-rectLeft)/2;
                             circleX = (rectRight+rectLeft)/2;
                             circleY = (rectBottom+rectTop)/2;
-                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                            Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                            Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                             invalidate();
                             downX = moveX;
                             downY = moveY;
@@ -531,7 +517,7 @@ public class CutViewCircle extends View {
                             if (rectRight < rectLeft + cornerLength * 2)
                                 rectRight = rectLeft + cornerLength * 2;
                         }
-                        //改变边框的高度, 如果两个都满足(比如手指在边角位置),那么就呈现一种缩放状态
+                        //縮放模式
                         if (isTop) {
                             rectTop += slideY;
                             if (rectTop < 0) rectTop = 0;
@@ -547,8 +533,8 @@ public class CutViewCircle extends View {
                         radius=(rectRight-rectLeft)/2;
                         circleX = (rectRight+rectLeft)/2;
                         circleY = (rectBottom+rectTop)/2;
-                        Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
-                        Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
+//                        Log.d("AAA", String.valueOf(radius)+" "+circleX+" "+circleY+"/n");
+//                        Log.d("AAA", String.valueOf(rectLeft)+" "+rectRight+" "+rectTop+" "+rectBottom+"/n");
                         invalidate();
                         downX = moveX;
                         downY = moveY;
@@ -584,12 +570,9 @@ public class CutViewCircle extends View {
     public int getRectWidth() {
         return (int) (measuredWidth);
     }
-
     public int getRectHeight() {
         return (int) (measuredHeight);
     }
-
-
     public void setAspect(float aspect){
         this.aspect = aspect;
     }
