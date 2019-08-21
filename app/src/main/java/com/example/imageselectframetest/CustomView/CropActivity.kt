@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import com.example.imageselectframetest.R
-import kotlinx.android.synthetic.main.activity_crop.*
 import kotlinx.android.synthetic.main.activity_crop.Btn_Cut
 import kotlinx.android.synthetic.main.activity_crop.imageView2
 import kotlinx.android.synthetic.main.activity_crop.imageViewOrigin
